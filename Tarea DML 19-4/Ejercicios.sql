@@ -29,7 +29,15 @@ GROUP BY E.nombre, E.diasResultado --los agrupamos por nombre y los dias resulta
 
 ----------------------------------------------------------------------------------------
 --Ejercicio 2
---Indicación
+--Indicación: Nombre y apellido de los pacientes (en una sola columna con título "Paciente") 
+--y número de exámenes realizado, de quienes se han realizado 3 o más exámenes.
 
+--Se realiza un select de la tabla pacientes y se declara una columna "Paciente"
+--la cual contendra el nombre + ' ' + apellido de la persona en una sola celda
+-- tambien tendra una columna contador para saber el numero de examenes que se ha realizado
+SELECT (P.nombre+' '+P.apellido) AS 'Paciente', COUNT(idResultado) AS 'Número de exámenes realizados' FROM Paciente P
+INNER JOIN Resultado R ON P.idUsuario = R.idUsuario
+GROUP BY P.nombre+' '+P.apellido
+HAVING COUNT(idResultado) >= 3
 
 ----------------------------------------------------------------------------------------
