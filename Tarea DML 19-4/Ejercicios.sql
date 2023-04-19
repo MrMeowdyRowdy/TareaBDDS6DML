@@ -2,41 +2,41 @@
 --Tarea DML
 --Autores:
 --Chasipanta Pablo
---OcaÒa Dennis
+--Oca√±a Dennis
 --Ramos Xavier
 --Version 1.0
---⁄ltima actualizaciÛn: 19/04/2023
+--√öltima actualizaci√≥n: 19/04/2023
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
 
 --Ejercicio 1
 
---IndicaciÛn:N˙mero de resultados realizados por examen de aquellos que no requieren ayuno.
---La consulta deber· devolver tres columnas: "Examen", "DÌas de Resultado" y "N˙mero de PrÈstamos" 
+--Indicaci√≥n:N√∫mero de resultados realizados por examen de aquellos que no requieren ayuno.
+--La consulta deber√° devolver tres columnas: "Examen", "D√≠as de Resultado" y "N√∫mero de Pr√©stamos" 
 
 --Se realiza un select para indicar los datos que queremos extraer
 --Se especifica las columnas que deseamos siendo estas:
 --Examen.Nombre y la nombramos "Examen"
---Examen.diasResultado y se nombre "DÌas de Resultado"
---Resultado.idResultado la cual se hace un conteo de existencias y se nombra "PrÈstamos realizados"
-SELECT E.nombre AS 'Ex·men', diasResultado AS 'DÌas de Resultado', COUNT(idResultado) AS 'PrÈstamos realizados' FROM Examen E 
+--Examen.diasResultado y se nombre "D√≠as de Resultado"
+--Resultado.idResultado la cual se hace un conteo de existencias y se nombra "Pr√©stamos realizados"
+SELECT E.nombre AS 'Ex√°men', diasResultado AS 'D√≠as de Resultado', COUNT(idResultado) AS 'Pr√©stamos realizados' FROM Examen E 
 INNER JOIN Resultado R ON E.idExamen = R.idExamen	--Se realiza un inner join para unir los examenes con los resultados obtenidos y asi poder contarlos
-WHERE E.ayuno = 0 -- Se establece una condiciÛn para mostrar solo los resultados de aquellos que no requieran ayuno
+WHERE E.ayuno = 0 -- Se establece una condici√≥n para mostrar solo los resultados de aquellos que no requieran ayuno
 GROUP BY E.nombre, E.diasResultado --los agrupamos por nombre y los dias resultado debido a la operacion COUNT usada
 
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
 --Ejercicio 2
---IndicaciÛn: Nombre y apellido de los pacientes (en una sola columna con tÌtulo "Paciente") 
---y n˙mero de ex·menes realizado, de quienes se han realizado 3 o m·s ex·menes.
+--Indicaci√≥n: Nombre y apellido de los pacientes (en una sola columna con t√≠tulo "Paciente") 
+--y n√∫mero de ex√°menes realizado, de quienes se han realizado 3 o m√°s ex√°menes.
 
---VersiÛn uno: cantidad TOTAL de examenes
+--Versi√≥n uno: cantidad TOTAL de examenes
 --Se realiza un select de la tabla pacientes y se declara una columna "Paciente"
 --la cual contendra el nombre + ' ' + apellido de la persona en una sola celda
--- tambien tendra una columna contador para saber el numero de ex·menes que se ha realizado
-SELECT (P.nombre+' '+P.apellido) AS 'Paciente', COUNT(idResultado) AS 'N˙mero de ex·menes realizados' FROM Paciente P
+-- tambien tendra una columna contador para saber el numero de ex√°menes que se ha realizado
+SELECT (P.nombre+' '+P.apellido) AS 'Paciente', COUNT(idResultado) AS 'N√∫mero de ex√°menes realizados' FROM Paciente P
 INNER JOIN Resultado R ON P.idUsuario = R.idUsuario -- Realizamos un inner join a resultado ya que podemos saber asi el numero de examenes en total que se ha realizado el paciente sin importar si son diferentes o no
 GROUP BY P.nombre+' '+P.apellido --Se excribe la sentencia para agrupar resultados debido a la operacion count que realizamos
 HAVING COUNT(idResultado) >= 3 --Se implementa la condicion para mostrar resultados
@@ -44,12 +44,47 @@ HAVING COUNT(idResultado) >= 3 --Se implementa la condicion para mostrar resulta
 --Version 2 Cantidad de TIPOS de examen
 --Se realiza un select de la tabla pacientes y se declara una columna "Paciente"
 --la cual contendra el nombre + ' ' + apellido de la persona en una sola celda
--- tambien tendra una columna contador para saber el numero de TIPOS de ex·menes que se ha realizado
-SELECT (P.nombre+' '+P.apellido) AS 'Paciente', COUNT(idResultado) AS 'N˙mero de ex·menes realizados' FROM Paciente P
+-- tambien tendra una columna contador para saber el numero de TIPOS de ex√°menes que se ha realizado
+SELECT (P.nombre+' '+P.apellido) AS 'Paciente', COUNT(idResultado) AS 'N√∫mero de ex√°menes realizados' FROM Paciente P
 INNER JOIN Resultado R ON P.idUsuario = R.idUsuario -- Realizamos un inner join a resultado ya que podemos saber asi el numero de examenes se ha realizado el paciente
 GROUP BY P.nombre+' '+P.apellido, r.idExamen 
 --Se excribe la sentencia para agrupar resultados debido a la operacion count que realizamos, 
---adem·s permite agrupar por tipo de examen para saber cuantos TIPOS de examen se ha 
+--adem√°s permite agrupar por tipo de examen para saber cuantos TIPOS de examen se ha 
 --realizado el paciente
 HAVING COUNT(idResultado) >= 3--Se implementa la condicion para mostrar resultados
+----------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------
+
+--Ejercicio 3
+
+--Indicaci√≥n:Listado de Pacientes con su edad y el tipo de sangre. 
+--Deber√° presentarse en el resultado de la consulta las columnas: "Paciente", "Edad", "Tipo de sangre" "Rango de edad" 
+--(cuando est√© entre 0 y 3 a√±os deber√° presentarse en la columna Rango de edad la frase: Beb√©; 
+--mayor a 3 hasta 11 a√±os: "Ni√±o"; 
+--entre 12 y 18 a√±os: "Adolescente"; 
+--mayor a 18: "Mayor de edad" )
+
+--Se realiza un select para indicar los datos que queremos extraer
+--Se especifica las columnas que deseamos siendo estas:
+--Paciente.nombre y la nombramos "Paciente"
+--'Edad' que es la columna que creamos para mostrar la edad de la persona
+--Paciente.tipoSangre y se nombre "Tipo de sangre"
+--'Rango de edad' que es la columna que usamos para poner al paciente en rango en base a su edad
+
+SELECT nombre AS 'Paciente',-- Se muestra el nombre como paciente
+'Edad'=--Se crea un columna llamada 'Edad' la cual se va a usar para mostrar la edad del paciente
+CASE 
+	WHEN CONVERT (date, GETDATE())<= fechaNacimiento THEN DATEDIFF(YEAR, fechaNacimiento, GETDATE()) -- El primer caso es para verificar si la fecha de cumplea√±os ya paso entonces se le asigna la edad normalmente
+	ELSE DATEDIFF(YEAR, fechaNacimiento, GETDATE())-1 -- El segundo caso es en caso que la fecha de cumplea√±os no haya pasado se resta un a√±o debido a que el paciente no ha cumplico a√∫n a√±os
+END,
+tipoSangre AS 'Tipo de sangre',--Se muestra el tipo de sangre
+'Rango de edad'=--Se crea la columna rango de edad en el ual se pondr√° al paciente en un rango espec√≠fico
+CASE 
+	WHEN DATEDIFF(YEAR, fechaNacimiento, GETDATE()) BETWEEN 0 AND 3 THEN 'Beb√©'--primer caso de 0 a 3 a√±os se asigna 'Beb√©'
+	WHEN DATEDIFF(YEAR, fechaNacimiento, GETDATE()) BETWEEN 3 AND 11 THEN 'Ni√±o'--segundo caso de 3 a 11 a√±os se asigna 'Ni√±o'
+	WHEN DATEDIFF(YEAR, fechaNacimiento, GETDATE()) BETWEEN 12 AND 18 THEN 'Adolescente'-- tercer caso de 12 a 18 a√±os se asigna 'Adolescente'
+	ELSE 'Mayor de edad'-- caso por defecto se asigna 'Mayor de edad'
+END
+FROM Paciente
 ----------------------------------------------------------------------------------------
