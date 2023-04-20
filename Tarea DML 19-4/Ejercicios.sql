@@ -123,7 +123,7 @@ INTO Laboratorista --describe donde ingresar
 FROM Paciente
 ORDER BY DATEDIFF(DAY,fechaNacimiento, GETDATE()) DESC --ordeno por la diferencia de edad de manera descendiente
 
-select * from Laboratorista --muestro tabla laboratorista
+SELECT * FROM Laboratorista --muestro tabla laboratorista
 GO
 ----------------------------------------------------------------------------------------
 
