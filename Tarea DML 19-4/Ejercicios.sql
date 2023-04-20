@@ -114,14 +114,16 @@ GO
 --clientes ordenados de manera descendente por la edad que están 
 --registrados en la tabla. Asígneles a los Entrenadores un correo 
 --compuesto por primera letra de nombre seguido de apellido@laboratorio.ec
-DROP TABLE IF EXISTS Laboratorista
 
-SELECT TOP 5 idUsuario, cedula, nombre,apellido,CONCAT(LEFT(nombre,1),apellido,'@laboratorio.ec') as mail,telefono,fechaNacimiento,tipoSangre,usuarioRegistro,fechaRegistro
-INTO Laboratorista
+DROP TABLE IF EXISTS Laboratorista -- Verifico si existe la tabla laboratoristas para eliminarla y crear una nueva
+--Selecciono los 5 primeros ordenados por fecha de nacimiento de manera descendente y tomo todos los valores dentro de la tabla pacientes 
+--para insertarlos dentro de una nueva tabla laboratorista
+SELECT TOP 5 idUsuario, cedula, nombre,apellido,CONCAT(LEFT(nombre,1),apellido,'@laboratorio.ec') as mail,telefono,fechaNacimiento,tipoSangre,usuarioRegistro,fechaRegistro --describe que datos obtener
+INTO Laboratorista --describe donde ingresar
 FROM Paciente
-ORDER BY DATEDIFF(DAY,fechaNacimiento, GETDATE()) DESC
+ORDER BY DATEDIFF(DAY,fechaNacimiento, GETDATE()) DESC --ordeno por la diferencia de edad de manera descendiente
 
-select * from Laboratorista
+select * from Laboratorista --muestro tabla laboratorista
 GO
 ----------------------------------------------------------------------------------------
 
