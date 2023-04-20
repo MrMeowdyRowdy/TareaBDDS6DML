@@ -53,6 +53,7 @@ GROUP BY P.nombre+' '+P.apellido, r.idExamen
 --realizado el paciente
 HAVING COUNT(idResultado) >= 3--Se implementa la condicion para mostrar resultados
 ----------------------------------------------------------------------------------------
+
 ----------------------------------------------------------------------------------------
 --Ejercicio 3
 
@@ -87,7 +88,6 @@ END
 FROM Paciente
 ----------------------------------------------------------------------------------------
 
-<<<<<<< Updated upstream
 ----------------------------------------------------------------------------------------
 
 --Ejercicio 4
@@ -101,13 +101,27 @@ R.fechaPedido AS 'Fecha de petición',R.fechaExamen AS 'Fecha de realización'
 FROM Resultado R
 RIGHT JOIN Examen E ON R.idExamen=E.idExamen
 WHERE DAY(R.fechaPedido)=DAY(R.fechaExamen)
-
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
+--EJERCICIO 5
+--Modificaci�n de datos:  Cree una tabla llamada "Laboratorista" 
+--basada en los registros de Paciente, que incluya los 5 primeros 
+--clientes ordenados de manera descendente por la edad que est�n 
+--registrados en la tabla.  As�gneles a los Entrenadores un correo 
+--compuesto por primera letra de nombre seguido de apellido@laboratorio.ec
+DROP TABLE IF EXISTS Laboratorista
 
+SELECT TOP 5 idUsuario, cedula, nombre,apellido,CONCAT(LEFT(nombre,1),apellido,'@laboratorio.ec') as mail,telefono,fechaNacimiento,tipoSangre,usuarioRegistro,fechaRegistro
+INTO Laboratorista
+FROM Paciente
+ORDER BY DATEDIFF(DAY,fechaNacimiento, GETDATE()) DESC
+
+select * from Laboratorista
+----------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------
 --Ejercicio 6
-
 --Indicación:Genere el script que devuelva el nombre y apellido (en una sola columna) 
 --y el tipo de usuario Paciente o Laboratorista de las personas registradas en la base de datos. 
 --En el caso que sean Paciente y Laboratorista deberá tener esa especificación.  
@@ -122,19 +136,5 @@ WHERE DAY(R.fechaPedido)=DAY(R.fechaExamen)
 SELECT P.Nombre +' '+ P.Apellido AS 'Nombre completo' FROM Paciente P UNION  
 
 ----------------------------------------------------------------------------------------
-=======
---EJERCICIO 4
---Modificaci�n de datos:  Cree una tabla llamada "Laboratorista" 
---basada en los registros de Paciente, que incluya los 5 primeros 
---clientes ordenados de manera descendente por la edad que est�n 
---registrados en la tabla.  As�gneles a los Entrenadores un correo 
---compuesto por primera letra de nombre seguido de apellido@laboratorio.ec
-DROP TABLE IF EXISTS Laboratorista
 
-SELECT TOP 5 idUsuario, cedula, nombre,apellido,CONCAT(LEFT(nombre,1),apellido,'@laboratorio.ec') as mail,telefono,fechaNacimiento,tipoSangre,usuarioRegistro,fechaRegistro
-INTO Laboratorista
-FROM Paciente
-ORDER BY DATEDIFF(DAY,fechaNacimiento, GETDATE()) DESC
 
-select * from Laboratorista
->>>>>>> Stashed changes
