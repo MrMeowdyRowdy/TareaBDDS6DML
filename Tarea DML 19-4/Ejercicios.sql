@@ -153,8 +153,8 @@ FROM   (SELECT P.Nombre, P.Apellido FROM Paciente P
 SELECT PL.nombre + ' ' + PL.apellido AS 'Nombre completo', -- se crea 'Nombre completo' con nombre y apellido
 'Rol'=
 CASE 
-	WHEN PL.nombre + ' ' + PL.apellido IN (SELECT L.nombre + ' ' + L.apellido FROM Laboratorista L) 
-	AND PL.nombre + ' ' + PL.apellido IN(SELECT P.nombre + ' ' + P.apellido FROM Paciente P) THEN 'Paciente y Laboratorista' -- Pirmer caso para verificar si es paciente y laboratorista
+	WHEN PL.nombre + ' ' + PL.apellido IN (SELECT L.nombre + ' ' + L.apellido FROM Laboratorista L) -- Pirmer caso para verificar si es paciente y laboratorista
+	AND PL.nombre + ' ' + PL.apellido IN(SELECT P.nombre + ' ' + P.apellido FROM Paciente P) THEN 'Paciente y Laboratorista' 
 	WHEN PL.nombre + ' ' + PL.apellido IN (SELECT L.nombre + ' ' + L.apellido FROM Laboratorista L) THEN 'Laboratorista' --Segundo caso para verificar si es solo laboratorista
 	ELSE 'Paciente' --Caso por defecto en caso que sea paciente
 END
