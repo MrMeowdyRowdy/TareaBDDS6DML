@@ -140,7 +140,9 @@ GO
 --Paciente.tipoSangre y se nombre "Tipo de sangre"
 --'Rango de edad' que es la columna que usamos para poner al paciente en rango en base a su edad
 
-SELECT P.Nombre +' '+ P.Apellido AS 'Nombre completo' FROM Paciente P UNION  
+SELECT P.Nombre +' '+ P.Apellido AS 'Nombre completo' FROM Paciente P 
+UNION  
+SELECT L.Nombre +' '+ L.Apellido AS 'Nombre completo' FROM Laboratorista L
 
 GO
 ----------------------------------------------------------------------------------------
