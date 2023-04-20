@@ -159,5 +159,5 @@ CASE
 	ELSE 'Paciente' --Caso por defecto en caso que sea paciente
 END
 FROM #PacientesLaboratoristas PL
-
+GO
 ----------------------------------------------------------------------------------------
