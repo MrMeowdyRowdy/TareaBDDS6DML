@@ -88,3 +88,38 @@ CASE
 END
 FROM Paciente
 ----------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------
+
+--Ejercicio 4
+
+--Indicación:Listado de exámenes de aquellos que han sido realizados el mismo día del pedido
+
+--
+
+SELECT R.idResultado AS 'Identificador',E.nombre AS 'Nombre exámen',
+R.fechaPedido AS 'Fecha de petición',R.fechaExamen AS 'Fecha de realización' 
+FROM Resultado R
+RIGHT JOIN Examen E ON R.idExamen=E.idExamen
+WHERE DAY(R.fechaPedido)=DAY(R.fechaExamen)
+
+----------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------
+
+--Ejercicio 6
+
+--Indicación:Genere el script que devuelva el nombre y apellido (en una sola columna) 
+--y el tipo de usuario Paciente o Laboratorista de las personas registradas en la base de datos. 
+--En el caso que sean Paciente y Laboratorista deberá tener esa especificación.  
+
+--Se realiza un select para indicar los datos que queremos extraer
+--Se especifica las columnas que deseamos siendo estas:
+--Paciente.nombre y la nombramos "Paciente"
+--'Edad' que es la columna que creamos para mostrar la edad de la persona
+--Paciente.tipoSangre y se nombre "Tipo de sangre"
+--'Rango de edad' que es la columna que usamos para poner al paciente en rango en base a su edad
+
+SELECT P.Nombre +' '+ P.Apellido AS 'Nombre completo' FROM Paciente P UNION  
+
+----------------------------------------------------------------------------------------
