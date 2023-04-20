@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------------------------
 USE LabX
 ----------------------------------------------------------------------------------------
-
 --Ejercicio 1
 
 --Indicación:Número de resultados realizados por examen de aquellos que no requieren ayuno.
@@ -32,7 +31,7 @@ GO
 --Indicación: Nombre y apellido de los pacientes (en una sola columna con título "Paciente") 
 --y número de exámenes realizado, de quienes se han realizado 3 o más exámenes.
 
---Versión uno: cantidad TOTAL de examenes
+--Versión 1: cantidad TOTAL de examenes
 --Se realiza un select de la tabla pacientes y se declara una columna "Paciente"
 --la cual contendra el nombre + ' ' + apellido de la persona en una sola celda
 -- tambien tendra una columna contador para saber el numero de exámenes que se ha realizado
@@ -42,7 +41,7 @@ GROUP BY P.nombre+' '+P.apellido --Se excribe la sentencia para agrupar resultad
 HAVING COUNT(idResultado) >= 3 --Se implementa la condicion para mostrar resultados
 GO
 ----------------------------------------------------------------------------------------
---Version 2 Cantidad de TIPOS de examen
+--Version 2: Cantidad de TIPOS de examen
 --Se realiza un select de la tabla pacientes y se declara una columna "Paciente"
 --la cual contendra el nombre + ' ' + apellido de la persona en una sola celda
 -- tambien tendra una columna contador para saber el numero de TIPOS de exámenes que se ha realizado
@@ -109,6 +108,7 @@ GO
 
 ----------------------------------------------------------------------------------------
 --EJERCICIO 5
+
 --Modificación de datos:  Cree una tabla llamada "Laboratorista" 
 --basada en los registros de Paciente, que incluya los 5 primeros 
 --clientes ordenados de manera descendente por la edad que están 
@@ -129,6 +129,7 @@ GO
 
 ----------------------------------------------------------------------------------------
 --Ejercicio 6
+
 --Indicación:Genere el script que devuelva el nombre y apellido (en una sola columna) 
 --y el tipo de usuario Paciente o Laboratorista de las personas registradas en la base de datos. 
 --En el caso que sean Paciente y Laboratorista deberá tener esa especificación.  
