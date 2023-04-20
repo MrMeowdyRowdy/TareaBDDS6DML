@@ -96,13 +96,18 @@ GO
 
 --Indicación:Listado de exámenes de aquellos que han sido realizados el mismo día del pedido
 
---
+--idResultado y la nombramos "Identificador"
+--E.nombre la usamos como 'Nombre exámen'
+--R.fechaPedido se usa para identificar la 'Fecha de petición'
+--R.fechaExamen se usa para identificar la 'Fecha de realización' 
+--Paciente.tipoSangre y se nombre "Tipo de sangre"
+--'Rango de edad' que es la columna que usamos para poner al paciente en rango en base a su edad
 
 SELECT R.idResultado AS 'Identificador',E.nombre AS 'Nombre exámen',
 R.fechaPedido AS 'Fecha de petición',R.fechaExamen AS 'Fecha de realización' 
 FROM Resultado R
-RIGHT JOIN Examen E ON R.idExamen=E.idExamen
-WHERE DAY(R.fechaPedido)=DAY(R.fechaExamen)
+RIGHT JOIN Examen E ON R.idExamen=E.idExamen --se une las tablas de resultado en el centro y examen a la derecha para poder tener el nombre de examen y las fechas requeridas
+WHERE DATEDIFF(DAY, R.fechaPedido, R.fechaExamen)=0 --se compara el día de pedido del examen y el dia de realización para comprobar si se hicieron el mismo día y mostrar los resultados
 GO
 ----------------------------------------------------------------------------------------
 
@@ -134,16 +139,25 @@ GO
 --y el tipo de usuario Paciente o Laboratorista de las personas registradas en la base de datos. 
 --En el caso que sean Paciente y Laboratorista deberá tener esa especificación.  
 
---Se realiza un select para indicar los datos que queremos extraer
---Se especifica las columnas que deseamos siendo estas:
---Paciente.nombre y la nombramos "Paciente"
---'Edad' que es la columna que creamos para mostrar la edad de la persona
---Paciente.tipoSangre y se nombre "Tipo de sangre"
---'Rango de edad' que es la columna que usamos para poner al paciente en rango en base a su edad
+--Se realiza en primer lugar la unión de las tablas que se necesita en base al nombre y apellido
+--Se usará nombre y apellido para unir en una nueva columna
+--se define 'Rol' para determinar si es paciente, laboratorista o ambas
 
-SELECT P.Nombre +' '+ P.Apellido AS 'Nombre completo' FROM Paciente P 
-UNION  
-SELECT L.Nombre +' '+ L.Apellido AS 'Nombre completo' FROM Laboratorista L
+DROP TABLE IF EXISTS #PacientesLaboratoristas -- se verifica si exste ya la tabla para crearla nuevamente
 
-GO
+SELECT nombre,apellido INTO   #PacientesLaboratoristas 
+FROM   (SELECT P.Nombre, P.Apellido FROM Paciente P 
+		UNION  
+		SELECT L.Nombre, L.Apellido FROM Laboratorista L) n -- se realiza la unión de las tablas por medio de UNION ya que no tienen una relación directa
+
+SELECT PL.nombre + ' ' + PL.apellido AS 'Nombre completo', -- se crea 'Nombre completo' con nombre y apellido
+'Rol'=
+CASE 
+	WHEN PL.nombre + ' ' + PL.apellido IN (SELECT L.nombre + ' ' + L.apellido FROM Laboratorista L) 
+	AND PL.nombre + ' ' + PL.apellido IN(SELECT P.nombre + ' ' + P.apellido FROM Paciente P) THEN 'Paciente y Laboratorista' -- Pirmer caso para verificar si es paciente y laboratorista
+	WHEN PL.nombre + ' ' + PL.apellido IN (SELECT L.nombre + ' ' + L.apellido FROM Laboratorista L) THEN 'Laboratorista' --Segundo caso para verificar si es solo laboratorista
+	ELSE 'Paciente' --Caso por defecto en caso que sea paciente
+END
+FROM #PacientesLaboratoristas PL
+
 ----------------------------------------------------------------------------------------
