@@ -7,7 +7,7 @@
 --Version 1.0
 --Última actualización: 19/04/2023
 ----------------------------------------------------------------------------------------
-
+USE LabX
 ----------------------------------------------------------------------------------------
 
 --Ejercicio 1
@@ -24,7 +24,7 @@ SELECT E.nombre AS 'Exámen', diasResultado AS 'Días de Resultado', COUNT(idRes
 INNER JOIN Resultado R ON E.idExamen = R.idExamen	--Se realiza un inner join para unir los examenes con los resultados obtenidos y asi poder contarlos
 WHERE E.ayuno = 0 -- Se establece una condición para mostrar solo los resultados de aquellos que no requieran ayuno
 GROUP BY E.nombre, E.diasResultado --los agrupamos por nombre y los dias resultado debido a la operacion COUNT usada
-
+GO
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
@@ -40,6 +40,7 @@ SELECT (P.nombre+' '+P.apellido) AS 'Paciente', COUNT(idResultado) AS 'Número d
 INNER JOIN Resultado R ON P.idUsuario = R.idUsuario -- Realizamos un inner join a resultado ya que podemos saber asi el numero de examenes en total que se ha realizado el paciente sin importar si son diferentes o no
 GROUP BY P.nombre+' '+P.apellido --Se excribe la sentencia para agrupar resultados debido a la operacion count que realizamos
 HAVING COUNT(idResultado) >= 3 --Se implementa la condicion para mostrar resultados
+GO
 ----------------------------------------------------------------------------------------
 --Version 2 Cantidad de TIPOS de examen
 --Se realiza un select de la tabla pacientes y se declara una columna "Paciente"
@@ -52,6 +53,7 @@ GROUP BY P.nombre+' '+P.apellido, r.idExamen
 --además permite agrupar por tipo de examen para saber cuantos TIPOS de examen se ha 
 --realizado el paciente
 HAVING COUNT(idResultado) >= 3--Se implementa la condicion para mostrar resultados
+GO
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
@@ -86,6 +88,7 @@ CASE
 	ELSE 'Mayor de edad'-- caso por defecto se asigna 'Mayor de edad'
 END
 FROM Paciente
+GO
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
@@ -101,14 +104,15 @@ R.fechaPedido AS 'Fecha de petición',R.fechaExamen AS 'Fecha de realización'
 FROM Resultado R
 RIGHT JOIN Examen E ON R.idExamen=E.idExamen
 WHERE DAY(R.fechaPedido)=DAY(R.fechaExamen)
+GO
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
 --EJERCICIO 5
---Modificaci�n de datos:  Cree una tabla llamada "Laboratorista" 
+--Modificación de datos:  Cree una tabla llamada "Laboratorista" 
 --basada en los registros de Paciente, que incluya los 5 primeros 
---clientes ordenados de manera descendente por la edad que est�n 
---registrados en la tabla.  As�gneles a los Entrenadores un correo 
+--clientes ordenados de manera descendente por la edad que están 
+--registrados en la tabla. Asígneles a los Entrenadores un correo 
 --compuesto por primera letra de nombre seguido de apellido@laboratorio.ec
 DROP TABLE IF EXISTS Laboratorista
 
@@ -118,6 +122,7 @@ FROM Paciente
 ORDER BY DATEDIFF(DAY,fechaNacimiento, GETDATE()) DESC
 
 select * from Laboratorista
+GO
 ----------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------
@@ -135,6 +140,5 @@ select * from Laboratorista
 
 SELECT P.Nombre +' '+ P.Apellido AS 'Nombre completo' FROM Paciente P UNION  
 
+GO
 ----------------------------------------------------------------------------------------
-
-
