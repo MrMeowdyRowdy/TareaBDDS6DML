@@ -611,3 +611,132 @@ EXECUTE ingresoResultado 'Examen de creatinina', '0606925350', '2023-04-19 09:00
 EXECUTE ingresoResultado 'Examen de hormonas sexuales', '0606925350', '2023-04-19 09:30:00','2023-04-21 08:00:00','2023-04-24 15:00:00','309.000'
 
 GO
+
+-----------------------------------------------------
+--------------Ejemplos uso de JSON-------------------
+-----------------------------------------------------
+
+----------------------------------------------
+--Ejemplo de uso de JSON en tabla paciente y OPENJSON
+----------------------------------------------
+
+--Alteración de la tabla paciente para incluir el nuevo campo de alergias
+ALTER TABLE Paciente
+ADD alergias NVARCHAR(MAX);
+
+GO
+
+--Declaración del json con el máximo para los posibles datos a recibir
+DECLARE @json NVARCHAR(MAX);
+
+--Inicialización del JSON con los datos que se desea que contenga
+SET @json = N'{"NroAlergias": "maní"}';
+
+--Inserción a paciente de un nuevo registro incluyendo desde el JSON el dato de las alergias
+INSERT INTO Paciente (cedula, nombre, apellido, mail, telefono, fechaNacimiento, tipoSangre, alergias) 
+VALUES ('1721642036', 'Leon', 'Cordero', 'leoncordero@gmail.com', '0994267815', '1960-05-25', 'A+', 
+(SELECT * FROM OpenJson(@json) WITH (alergias NVARCHAR(MAX) '$.NroAlergias')))
+
+--Select para mostrar el resultado
+SELECT * FROM Paciente
+WHERE cedula = '1721642036'
+
+GO
+
+----------------------------------------------
+--Ejemplo de uso de ISJSON
+----------------------------------------------
+
+--Declaración del json con el máximo para los posibles datos a recibir
+DECLARE @json NVARCHAR(MAX);
+
+--Inicialización del JSON con los datos que se desea que contenga
+SET @json = N'{"NroAlergias": "maní"}';
+
+--Comparación para verificar si es o no un tipo JSON
+IF (ISJSON(@json) > 0)  
+BEGIN  
+     PRINT ('Es JSON') --En caso de serlo indica al usuario que lo es
+END
+
+GO
+
+----------------------------------------------
+--Ejemplo de uso de JSON_VALUE
+----------------------------------------------
+
+--Declaración del json con el máximo para los posibles datos a recibir
+DECLARE @json NVARCHAR(MAX);
+
+--Inicialización del JSON con los datos que se desea que contenga
+SET @json = N'{"NroAlergias": "maní"}';
+
+--Declaración de la variable que va a recibir el parámetro del JSON
+DECLARE @town NVARCHAR(32);
+
+--Inicialización de la variable con el valor que existe en el JSON
+SET @town=JSON_VALUE(@json,'$.NroAlergias');
+
+--Impresión del resultado
+PRINT ''+@town
+
+GO
+
+----------------------------------------------
+--Ejemplo de uso de JSON_QUERY
+----------------------------------------------
+
+--Declaración del json con el máximo para los posibles datos a recibir
+DECLARE @json NVARCHAR(MAX);
+
+--Inicialización del JSON con los datos que se desea que contenga
+SET @json = N'{
+"paciente":
+      [{
+         "name":"Pedro",
+         "email":"pepe@gmail.com",
+         "tipoSangre":"A+"
+	   },
+       {
+         "name":"Marta",
+         "email":"marta@gmail.com",
+         "tipoSangre":"O+"
+       }   
+	  ]
+}';
+
+--Selección como QUERY de los datos en la posición 0 del JSON
+SELECT JSON_QUERY(@json,'$.paciente[0]') AS 'Result'
+
+GO
+
+----------------------------------------------
+--Ejemplo de uso de JSON_MODIFY
+----------------------------------------------
+
+--Declaración del json con el máximo para los posibles datos a recibir
+DECLARE @json NVARCHAR(MAX);
+
+--Inicialización del JSON con los datos que se desea que contenga
+SET @json = N'{"NroAlergias": "maní"}';
+
+--Modificación del dato JSON en el campo de alergias
+SET @json= JSON_MODIFY(@json,'$.NroAlergias','Nuez')
+
+--Impresión de resultados
+PRINT @json
+
+GO
+
+----------------------------------------------
+--Ejemplo de uso de FOR JSON AUTO
+----------------------------------------------
+
+--Selección de los 5 primeros registros de paciente y los datos deseados para convertir en un JSON
+SELECT TOP 5   
+       idUsuario As Id,  
+       nombre, apellido,  
+       cedula As 'Identificacion',  
+       mail As 'Correo'  
+   FROM Paciente  
+   FOR JSON AUTO
